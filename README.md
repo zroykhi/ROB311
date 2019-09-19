@@ -1,2 +1,2 @@
-# breast-cancer-classification
-ROB311 class project
+# ROB311 class project
+Using KNN to predict breast cancer diagnosis and haberman's survival result
