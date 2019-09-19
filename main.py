@@ -102,48 +102,32 @@ def euclidian_distance(X_test, X_train, length):  # it is used for calculating e
         distance += np.square(int(x_test_x) - int(x_train_x))
     return np.sqrt(distance)
 
-
-# def knn(trainingSet, testInstance, k):  # here we are defining our model
-#
-#     distances = {}
-#     sort = {}
-#
-#     length = testInstance.shape[1]
-#
-#     for x in range(len(trainingSet)):
-#         dist = ED(testInstance, trainingSet.iloc[x], length)
-#         distances[x] = dist[0]
-#     sortdist = sorted(distances.items(), key=operator.itemgetter(1))
-#     neighbors = []
-#     for x in range(k):
-#         neighbors.append(sortdist[x][0])
-#     Votes = {}  # to get most frequent class of rows
-#     for x in range(len(neighbors)):
-#         response = trainingSet.iloc[neighbors[x]][-1]
-#         if response in Votes:
-#             Votes[response] += 1
-#         else:
-#             Votes[response] = 1
-#     sortvotes = sorted(Votes.items(), key=operator.itemgetter(1), reverse=True)
-#     return (sortvotes[0][0], neighbors)
-
-
-# testSet = [[6.8, 3.4, 4.8, 2.4]]
-# test = pd.DataFrame(testSet)
-# k = 1
-# k1 = 3
-# result, neigh = knn(dataset, test, k)
-# result1, neigh1 = knn(dataset, test, k1)
-# print(result)
-# print(neigh)
-# print(result1)
-# print(neigh1)
-
-## -----=-=-=-=-=-=-
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42,
 stratify=y, test_size=0.2)
 
+def winner_from_dict(pseudo_dict, k):
+    """
+
+    Args:
+        dict:
+        k:
+    Returns:
+        winner_class (int): class with most occurrence in sorted distance dict
+    """
+    sorted_tuple_list = Sort(pseudo_dict)  # min to max distance
+    pool = []
+    for i in range(k):
+        current_couple = sorted_tuple_list[k]
+        candidate = current_couple[1]
+        pool.append(candidate)
+    winner_class = max(set(pool), key=pool.count)
+    return winner_class
+
+def Sort(tup):
+    # sort a list a tuple according to first element of each tuples
+    # key is set to sort using float elements
+    return(sorted(tup, key = lambda x: float(x[0])))
 
 distance_list = []
 test_sample_index = 0
@@ -156,16 +140,12 @@ for test_sample in X_test:
     for train_data in X_train:
         distance_list[test_sample_index].append(euclidian_distance(test_sample, train_data, 9))
     y_train_copy = list(y_train.copy())  # making a copy to save original from deterioration
-    sorted_distance_list, sorted_y_train_copy = \
-        (list(t) for t in zip(*sorted(zip(distance_list[test_sample_index], y_train_copy))))
 
-    # print(sorted_distance_list)
-    # print("of len", len(sorted_distance_list))
-    # print(sorted_y_train_copy)
-    # print("of len", len(sorted_y_train_copy))
-    # sorted_distance_list = distance_list[test_sample_index].sort()
-    res = max(set(sorted_y_train_copy[:k]), key=sorted_y_train_copy[:k].count)
-    # print("winner is", res)
+    pseudo_dict = [(distance_list[test_sample_index][i], y_train_copy[i]) for i
+                   in range(len(y_train_copy))]
+
+    res = winner_from_dict(pseudo_dict, k)
+    print("winner is", res)
     # print("for k = ", k)
     class_list.append(res)
     test_sample_index += 1
@@ -173,7 +153,3 @@ for test_sample in X_test:
 C = confusion_matrix(y_test, class_list)
 class_names = ['Good', 'Bad']
 plot_confusion_matrix(C, classes=class_names, normalize=True,title='Normalized Confusion Matrix')
-
-# plt.figure()
-# plt.plot_confusion_matrix(C, classes=class_names, normalize=True,title='Normalized Confusion Matrix')
-#####
