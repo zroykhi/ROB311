@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 """
 usage: 
-    python svm.py --num_epoch 1 -k linear -g 1 -C 0.001 --train_size 1000
+    python svm.py --num_epoch 3 -k rbf -g scale -C 1 --train_size 5000
 """ 
 def int2float_grey(x):
     x = x / 255
@@ -49,16 +49,19 @@ def main(epoch=1, C=0.001, gamma=1, kernel='linear', train_size=-1, search_param
         ax.imshow(trainX[isample].reshape(28,28),cmap='gray')
         ax.set_title("Chiffre = {}".format(trainY[isample]))
         ax.axis('off')
-
+    try:
+        gamma = int(gamma)
+    except:
+        pass
     tic = timeit.default_timer()
     if search_parameters:
         # search the best parameters
         print('searching for the best parameters will take long time, please wait ...')
         svc = svm.SVC(shrinking=True, max_iter=500) # max_iter = 500 pour limiter les non convergences de l'optimiseur 
         Clist=np.logspace(0,2,10)
-        Glist=np.logspace(0,3,10)
+        Glist=np.logspace(0,3,10,'scale')
         Dlist=[1,2,3]
-        Kernellist = ('linear', 'poly')
+        Kernellist = ('linear', 'poly', 'rbf')
         parameters = {'kernel': Kernellist, 'C':Clist, 'gamma':Glist, "degree":Dlist}
         clf = GridSearchCV(svc, parameters)
     else:
@@ -91,16 +94,16 @@ def main(epoch=1, C=0.001, gamma=1, kernel='linear', train_size=-1, search_param
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train svm')
-    parser.add_argument('-g', help='parameter gamma', default=1, type=float)
+    parser.add_argument('-g', help='parameter gamma', default='scale')
     parser.add_argument('-C', help='parameter C', default=1, type=float)
     parser.add_argument('--num_epochs', help='Number of training epoch', default=3, type=int)
     parser.add_argument('--train_size', help='training size', default=5000, type=int)
-    parser.add_argument('-k', help='parameter kernel, could be linear, rbf, poly, etc', default='linear', type=str)
+    parser.add_argument('-k', help='parameter kernel, could be linear, rbf, poly, etc', default='rbf', type=str)
     parser.add_argument('-s', help='whether search for parameters', default=False)
     args = parser.parse_args()
     print("""
     usage: 
-        python svm.py --num_epoch 3 -k linear -g 1 -C 1 --train_size 5000
+        python svm.py --num_epoch 3 -k rbf -g scale -C 1 --train_size 5000
     see more:
         python svm.py -h""")
 
