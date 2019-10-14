@@ -1,4 +1,9 @@
 # Projets du cours ROB311
 *Authors: Simon QUEYRUT, Zhi ZHOU*
 
-We uploaded the large training data file to github, this may cause some issues when using command `git clone`. If you encounter any problems when cloning the repo, please run `$ brew install git-lfs` or refer to the installation [website](https://git-lfs.github.com/) then clone using the `$ git lfs clone https://github.com/zroykhi/ROB311.git` command.
+We uploaded the large training data file to github. Please follow steps below:
+1. install git-lfs, click [here](https://git-lfs.github.com/) to see more
+2. then clone the repo using the command below
+```
+git lfs clone https://github.com/zroykhi/ROB311.git
+```
