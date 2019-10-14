@@ -11,4 +11,7 @@ Since training all the data takes a long time, so we used 5000 training samples 
 
 Besides, our code enables users to find better parameters automatically, use `python svm.py -s True` to try this feature.
 
-*Note: we uploaded the large training data file to github, this may cause some issues when using command `git clone`. If you encounter any problems when cloning the repo, please go to the [website](https://github.com/zroykhi/ROB311.git) and download the repo files in zip format directly.* 
+Important note
+----
+
+We uploaded the large training data file to github, this may cause some issues when using command `git clone`. If you encounter any problems when cloning the repo, please run `$ brew install git-lfs` or refer to the installation [website](https://git-lfs.github.com/) then clone using the `$ git lfs clone https://github.com/zroykhi/ROB311.git` command.
