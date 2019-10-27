@@ -25,6 +25,7 @@ sample_size = 300
 print("n_digits: %d, \t n_training_samples %d, \t n_features %d"
 	  % (n_digits, n_samples, n_features))
 
+# Visualize data
 fig, axes = plt.subplots(2, 4)
 fig.suptitle("Example digital numbers", fontsize="x-large")
 for ax in axes.flat:
